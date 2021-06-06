@@ -1,0 +1,137 @@
+@startuml
+class AltAzimuth {
+-bool isWork
+-cv::Point point
+-cv::Point centre
+-int width, height
+-int calibrationW, calibrationH
+-int d_x, d_y
+-int positionX, positionY
+-int pin0, pin1
+-int range
+-int value
+
+-void tracking(int delayQuantity = 50)
+-void setPositionX(int delayQuantity)
+-void setPositionY(int delayQuantity)
+-void searching(int delayQuantity = 150)
+
++AltAzimuth(bool &isWork, cv::Point &point, int width = 640, int height = 480, pin0 = 23, pin1 = 24, range = 100, value = 50)
++void mainLoop()
++virtual \~AltAzimuth()
+}
+
+class Perceptrons {
+
+.. struct perceptron ..
++double value
++double d_value
++std::vector<double> weights
++std::vector<double> d_weights
++double derivative 
+....
++std::vector<perceptron> perceptronsLayer
++perceptron bias;
++int quantityOfPerceptrons
++int quantityOfWeights
+____
++Perceptrons(int numbOfPerceptrons, int numbOfWeights)
++\~Perceptrons()
++int getQuantityOfPerceptrons()
++int getQuantityOfWeights()
+}
+
+class NeuralNetwork {
+    -int countLayers
+    -std::vector<Perceptrons*> layers
+    -bool isLearning
+    -std::string typeOfData
+    -int numbOfMotion
+    -std::vector<double> data
+
+    +std::vector<double> arr
+
++NeuralNetwork(int inputPerceptrons, int outputPerceptrons, std::vector<int> hiddenLayers)
++\~NeuralNetwork()
++void setInputPerceptrons(std::string type, std::vector<double> &data)
++void setPrimaryPerseptrons()
++void setPrimaryWeights()
++double sigm(double x)
++double d_sigm(double x)
++void calculatePerceptrons(int begin, int end, int layer)
++void calculateNeuralNetwork()
++void setTrueAnswer(int numbPerceptron)
++void backPropagationBias(int layer)
++void backPropagationWeights(int layer)
++void weightsDifference(double coefficient = 0.02)
++void backPropagationPerceptrons(int layer)
++void backPropagation()
++double levelOfEducation()
++bool saveWeights(std::string path)
++bool loadWeights(std::string path, int numbOfLayer)
++void loadData(std::string type)
++void study(std::string type)
++void calculateDirsAndFiles(std::string type, std::vector<int> &dirsAndFiles_out, int &quantityOfFiles_out)
++int getQuantityOfItemInFolder(std::string pathToFolder)
++void saveTrainData(std::string type , int numbOfFolder /*Номер жеста*/, const std::vector<double> &data)
++void loadTrainData(std::string type, int numbOfFolder, int numbOfFile, std::string &type_out, int &numb_out, std::vector<double> &data_out)
+}
+
+class MediaPipeHandsDetector {
+    -bool isDetected
+    -mediapipe::CalculatorGraph graph
+    -std::unique_ptr<mediapipe::OutputStreamPoller> outputVideoPoller
+    -std::unique_ptr<mediapipe::OutputStreamPoller> outputLandmarksPoller
+    -std::unique_ptr<mediapipe::OutputStreamPoller> outputHandCountPoller
+    -::mediapipe::Packet handCountPacket
+    -::mediapipe::Packet landmarksPacket
+    -::mediapipe::Packet imagePacket
+    -std::string calculator_graph_config_contents
+    -mediapipe::CalculatorGraphConfig config
+    -size_t frame_timestamp_us
+
+    #absl::Status Setup(std::string calculator_graph_config_file)
+    #absl::Status Shutdown()
+
+    +MediaPipeHandsDetector(bool &isDetected, std::string calculator_graph_config_file)
+    +virtual ~MediaPipeHandsDetector() 
+    +absl::Status RunMPPGraph(cv::Mat &camera_frame_raw)
+}
+
+class HandTracking {
+    -bool isWork
+    -bool isDetected
+    -cv::VideoCapture capture
+    -bool grab_frames
+    -cv::Mat camera_frame_raw
+    -std::string windowName = "Image"
+    -cv::Scalar lower{0,250,250}
+    -cv::Scalar upper{5,255,255}
+    -cv::Mat frameBlur
+    -cv::Mat frameHSV
+    -cv::Mat frameMask
+    -std::vector <std::vector<cv::Point>> contours
+    -std::vector <cv::Vec4i> hierarchy
+    -std::vector <std::vector<cv::Point>> contoursPoly
+    -int area
+    -double perimeter
+    -cv::Point point
+    -int X, Y
+    -int numbPoints
+    -std::vector<int> hiddenLayers
+    -int inputPerceptrons
+    -int outputPerceptrons
+    -NeuralNetwork *neuralNetwork
+
+    -void calculateCenterOfMass()
+    -void showVideo()
+    -void frameProcessing()
+
++HandTracking(int inputPerceptrons, int outputPerceptrons, std::vector<int> hiddenLayers)
++\~HandTracking()
++void processTracking()
++void processLearning()
++bool &getIsWork()
++cv::Point &getPoint()
+}
+@enduml

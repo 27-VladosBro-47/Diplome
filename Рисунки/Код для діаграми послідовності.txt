@@ -1,0 +1,13 @@
+@startuml
+Program   ->  Mode     ++   : SetMode(string mode)
+Mode     ->  HandTrackingInit ++   : handTracking(int in, int out, vector hidden)
+Mode     -> AltAzimuth ++   : AltAzimuth(bool &isWork, cv::Point &point)
+AltAzimuth --> Program   --   : mainLoop()
+HandTrackingInit ->  HandTrackingStart ++   : processTracking()
+HandTrackingStart -> neuralNetworkLoad ++ : loadData(string type)
+neuralNetworkLoad -> MediaPipeHandsDetector ++ : handsDetector(bool mode)
+MediaPipeHandsDetector -> HandTrackingFrames ++ : frameProcessing()
+HandTrackingFrames -> HandTrackingMass ++ :  calculateCenterOfMass()
+HandTrackingMass -> HandTrackingVideo ++ : showVideo()
+HandTrackingVideo --> Program   --   : ok
+@enduml
